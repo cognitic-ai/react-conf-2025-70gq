@@ -46,6 +46,7 @@ export default function SpeakersScreen() {
 
   return (
     <FlatList
+      key="speakers-2col"
       data={filteredSpeakers}
       keyExtractor={(item) => item.id}
       contentInsetAdjustmentBehavior="automatic"
