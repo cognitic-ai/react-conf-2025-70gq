@@ -27,7 +27,7 @@ const AppleStackPreset: NativeStackNavigationOptions =
       };
 
 export const unstable_settings = {
-  schedule: { anchor: "schedule" },
+  index: { anchor: "index" },
   speakers: { anchor: "speakers" },
   videos: { anchor: "videos" },
 };
@@ -36,7 +36,7 @@ export default function SharedLayout({ segment }: { segment: string }) {
   const screen = segment.match(/\((.*)\)/)?.[1]!;
 
   const titles: Record<string, string> = {
-    schedule: "React Conf 2025",
+    index: "React Conf 2025",
     speakers: "Speakers",
     videos: "Videos",
   };

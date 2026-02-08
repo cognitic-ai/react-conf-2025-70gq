@@ -11,7 +11,7 @@ export default function Layout() {
     <ThemeProvider>
       <ConferenceDataProvider>
         <NativeTabs minimizeBehavior="onScrollDown">
-          <NativeTabs.Trigger name="(schedule)">
+          <NativeTabs.Trigger name="(index)">
             <Label>Schedule</Label>
             <Icon sf={{ default: "calendar", selected: "calendar" }} />
           </NativeTabs.Trigger>
