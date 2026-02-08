@@ -155,6 +155,7 @@ function SessionCard({
                     source={{ uri: firstSpeaker.profilePicture }}
                     style={{ width: 48, height: 48, borderRadius: 24 }}
                     contentFit="cover"
+                    cachePolicy="memory-disk"
                   />
                 </Link.AppleZoom>
               ) : (

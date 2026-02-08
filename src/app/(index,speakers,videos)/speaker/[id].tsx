@@ -68,6 +68,7 @@ export default function SpeakerDetail() {
                 source={{ uri: speaker.profilePicture }}
                 style={{ width: "100%", aspectRatio: 1 }}
                 contentFit="cover"
+                cachePolicy="memory-disk"
               />
             ) : (
               <View

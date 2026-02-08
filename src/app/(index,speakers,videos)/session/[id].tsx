@@ -4,7 +4,6 @@ import * as AC from "@bacons/apple-colors";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { Image } from "expo-image";
 import { useConferenceData } from "@/components/conference-data";
-import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 
 export default function SessionDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -50,7 +49,14 @@ export default function SessionDetail() {
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={{ padding: 16 }}
       >
-        <Text style={{ fontSize: 17, color: AC.secondaryLabel, textAlign: "center", marginTop: 80 }}>
+        <Text
+          style={{
+            fontSize: 17,
+            color: AC.secondaryLabel,
+            textAlign: "center",
+            marginTop: 80,
+          }}
+        >
           {loading ? "Loading..." : "Session not found"}
         </Text>
       </ScrollView>
@@ -63,91 +69,136 @@ export default function SessionDetail() {
       60000
   );
 
+  const firstSpeaker = speakerDetails[0] as any;
+
   return (
     <>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={{ padding: 16, gap: 16 }}
       >
+        {/* Hero card with speaker image as zoom target */}
         <Link.AppleZoomTarget>
           <View
             style={{
               backgroundColor: AC.secondarySystemGroupedBackground,
-              borderRadius: 20,
+              borderRadius: 24,
               borderCurve: "continuous",
-              padding: 20,
-              gap: 16,
+              overflow: "hidden",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
             }}
           >
-            <Text
-              selectable
-              style={{ fontSize: 26, fontWeight: "700", color: AC.label }}
-            >
-              {session.title}
-            </Text>
-
-            {/* Speakers */}
-            <View style={{ gap: 12 }}>
-              {speakerDetails.map((speaker: any) => (
-                <Link key={speaker.id} href={`/speaker/${speaker.id}`} asChild>
-                  <Link.Trigger withAppleZoom>
-                    <Pressable
-                      style={{ flexDirection: "row", gap: 12, alignItems: "center" }}
-                    >
-                      {speaker.profilePicture ? (
-                        <Image
-                          source={{ uri: speaker.profilePicture }}
-                          style={{ width: 52, height: 52, borderRadius: 26 }}
-                          contentFit="cover"
-                        />
-                      ) : (
-                        <View
-                          style={{
-                            width: 52,
-                            height: 52,
-                            borderRadius: 26,
-                            backgroundColor: AC.systemBlue,
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Image
-                            source="sf:person.fill"
-                            style={{ fontSize: 22, color: "white" }}
-                          />
-                        </View>
-                      )}
-                      <View style={{ flex: 1, gap: 2 }}>
-                        <Text
-                          selectable
-                          style={{
-                            fontSize: 18,
-                            fontWeight: "600",
-                            color: AC.label,
-                          }}
-                        >
-                          {speaker.fullName}
-                        </Text>
-                        {speaker.tagLine ? (
-                          <Text
-                            style={{ fontSize: 14, color: AC.secondaryLabel }}
-                          >
-                            {speaker.tagLine}
-                          </Text>
-                        ) : null}
-                      </View>
-                      <Image
-                        source="sf:chevron.right"
-                        style={{ fontSize: 14, color: AC.tertiaryLabel }}
-                      />
-                    </Pressable>
-                  </Link.Trigger>
-                  <Link.Preview />
-                </Link>
-              ))}
+            {firstSpeaker?.profilePicture ? (
+              <Image
+                source={{ uri: firstSpeaker.profilePicture }}
+                style={{ width: "100%", aspectRatio: 16 / 9 }}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+              />
+            ) : null}
+            <View style={{ padding: 20, gap: 8 }}>
+              <Text
+                selectable
+                style={{ fontSize: 26, fontWeight: "700", color: AC.label }}
+              >
+                {session.title}
+              </Text>
+              <Text
+                style={{ fontSize: 15, color: AC.secondaryLabel }}
+              >
+                {new Date(session.startsAt).toLocaleString([], {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+                {" · "}
+                {durationMin} min
+              </Text>
             </View>
           </View>
         </Link.AppleZoomTarget>
+
+        {/* Speakers */}
+        <View style={{ gap: 10 }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "600",
+              color: AC.label,
+              paddingHorizontal: 4,
+            }}
+          >
+            Speakers
+          </Text>
+          {speakerDetails.map((speaker: any) => (
+            <Link key={speaker.id} href={`/speaker/${speaker.id}`} asChild>
+              <Link.Trigger withAppleZoom>
+                <Pressable
+                  style={{
+                    backgroundColor: AC.secondarySystemGroupedBackground,
+                    borderRadius: 16,
+                    borderCurve: "continuous",
+                    padding: 14,
+                    flexDirection: "row",
+                    gap: 12,
+                    alignItems: "center",
+                  }}
+                >
+                  {speaker.profilePicture ? (
+                    <Image
+                      source={{ uri: speaker.profilePicture }}
+                      style={{ width: 52, height: 52, borderRadius: 26 }}
+                      contentFit="cover"
+                      cachePolicy="memory-disk"
+                    />
+                  ) : (
+                    <View
+                      style={{
+                        width: 52,
+                        height: 52,
+                        borderRadius: 26,
+                        backgroundColor: AC.systemBlue,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Image
+                        source="sf:person.fill"
+                        style={{ fontSize: 22, color: "white" }}
+                      />
+                    </View>
+                  )}
+                  <View style={{ flex: 1, gap: 2 }}>
+                    <Text
+                      selectable
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "600",
+                        color: AC.label,
+                      }}
+                    >
+                      {speaker.fullName}
+                    </Text>
+                    {speaker.tagLine ? (
+                      <Text
+                        style={{ fontSize: 14, color: AC.secondaryLabel }}
+                      >
+                        {speaker.tagLine}
+                      </Text>
+                    ) : null}
+                  </View>
+                  <Image
+                    source="sf:chevron.right"
+                    style={{ fontSize: 14, color: AC.tertiaryLabel }}
+                  />
+                </Pressable>
+              </Link.Trigger>
+              <Link.Preview />
+            </Link>
+          ))}
+        </View>
 
         {/* Session info card */}
         <View

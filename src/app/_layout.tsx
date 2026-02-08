@@ -1,13 +1,9 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { ConferenceDataProvider } from "@/components/conference-data";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import {
-  NativeTabs,
-  Icon,
-  Label,
-} from "expo-router/unstable-native-tabs";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { Tabs as WebTabs } from "expo-router/tabs";
-import { useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 export default function Layout() {
   return (
@@ -23,16 +19,37 @@ function NativeTabsLayout() {
   return (
     <NativeTabs minimizeBehavior="onScrollDown">
       <NativeTabs.Trigger name="(index)">
-        <Label>Schedule</Label>
-        <Icon sf={{ default: "calendar", selected: "calendar" }} />
+        <NativeTabs.Trigger.Label>Schedule</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          {...Platform.select({
+            ios: { sf: { default: "calendar", selected: "calendar" } },
+            default: {
+              src: <NativeTabs.Trigger.VectorIcon family={MaterialIcons} name="event" />,
+            },
+          })}
+        />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="(speakers)">
-        <Label>Speakers</Label>
-        <Icon sf={{ default: "person.2", selected: "person.2.fill" }} />
+        <NativeTabs.Trigger.Label>Speakers</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          {...Platform.select({
+            ios: { sf: { default: "person.2", selected: "person.2.fill" } },
+            default: {
+              src: <NativeTabs.Trigger.VectorIcon family={MaterialIcons} name="people" />,
+            },
+          })}
+        />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="(videos)">
-        <Label>Videos</Label>
-        <Icon sf={{ default: "play.rectangle", selected: "play.rectangle.fill" }} />
+        <NativeTabs.Trigger.Label>Videos</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          {...Platform.select({
+            ios: { sf: { default: "play.rectangle", selected: "play.rectangle.fill" } },
+            default: {
+              src: <NativeTabs.Trigger.VectorIcon family={MaterialIcons} name="play-circle-outline" />,
+            },
+          })}
+        />
       </NativeTabs.Trigger>
     </NativeTabs>
   );
